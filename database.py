@@ -3,6 +3,11 @@ import streamlit as st
 import traceback
 import numpy as np
 import torch
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set this before importing sentence_transformers
 torch.set_num_threads(1)
@@ -38,11 +43,11 @@ def get_embeddings(text, model):
 def get_db_connection():
     try:
         conn = psycopg2.connect(
-            dbname="iplchatbot",
-            user="postgres",
-            password="abcd1234",
-            host="localhost",
-            port="5432"
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT")
         )
         conn.cursor().execute("SELECT 1")  # Test connection
         return conn
